@@ -270,7 +270,7 @@ def _card(index: int, post: dict, png_path: Path) -> str:
   <div class="day-body">
     <figure class="shot">
       <img src="{_preview_data_uri(png_path)}" alt="{html.escape(post['headline'])}">
-      <figcaption>{html.escape(png_path.name)} · 1080×1350</figcaption>
+      <figcaption>{html.escape(png_path.name)} · 1440×1440</figcaption>
     </figure>
     <div class="copy">
       <h3 class="copy-label">Caption</h3>
@@ -482,6 +482,10 @@ TEMPLATE = """<title>Al Balı — 1-ci həftənin kontenti</title>
       paylaşılacaq.</p>
     <p>Qumral çərçivəli qeydlər <strong>sənin təsdiqini gözləyən iddialardır</strong>.
       Arıçı sənsən — mən uydurma rəqəm və ya fakt yazmaq istəmirəm.</p>
+    <p>Vizual mövcud lentə uyğunlaşdırılıb: fon, yaşıl başlıq və narıncı rənglər
+      köhnə postlarınızdan piksel səviyyəsində götürülüb, loqo da oradan
+      kəsilib. Format köhnə postlar kimi <strong>kvadrat (1:1)</strong> —
+      profil şəbəkəsində kəsilmə olmasın deyə.</p>
     <div class="facts">
       <span><b>7</b> post</span>
       <span><b>1&nbsp;–&nbsp;7 avqust</b></span>
