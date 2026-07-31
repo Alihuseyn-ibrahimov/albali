@@ -218,16 +218,16 @@ POSTS: list[dict] = [
             "Balın dadı arıdan yox, çiçəkdən gəlir. 🌿\n\n"
             "Arılarımız Laçında, 2441 metr yüksəklikdə işləyir. Bu hündürlükdə "
             "iki şey dəyişir:\n\n"
-            "🪻 Çiçək müxtəlifliyi artır — kəklikotu, yovşan, dağ nanəsi və "
-            "adını belə bilmədiyimiz onlarla dağ çiçəyi\n"
+            "🪻 Çiçək müxtəlifliyi artır — kəklikotu, qantəpər, andızotu, "
+            "itburnu çiçəyi və onlarla başqa dağ bitkisi\n"
             "🚫 Kənd təsərrüfatı kimyası yoxdur — nə dərman, nə gübrə\n\n"
             "Ona görə dağ balının ətri daha güclü, dadı daha mürəkkəb olur. "
             "Bir qaşıq balda bütöv bir yamacın qoxusu var.\n\n"
             "Sifariş üçün DM yazın 📩"
         ),
         "tags": TAGS_HEKAYE,
-        "yoxla": "Çiçək adlarını (kəklikotu, yovşan, dağ nanəsi) təsdiqlə — "
-        "Oğuldərə yamaclarında həqiqətən bunlar varmı?",
+        "yoxla": "Çiçək adları səninlə düzəldildi (2026-07-31): kəklikotu, "
+        "qantəpər, andızotu, itburnu çiçəyi. ✔ təsdiqlənib",
     },
 ]
 
@@ -521,7 +521,7 @@ def build() -> Path:
     cards = []
     for i, post in enumerate(POSTS):
         d = START + timedelta(days=i)
-        png = OUT_DIR / f"{d:%m-%d}-{post['column']}.png"
+        png = OUT_DIR / f"{d:%m-%d}-{post['column']}.jpg"
         make_post(
             column=post["column"],
             headline=post["headline"],

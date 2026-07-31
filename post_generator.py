@@ -222,7 +222,13 @@ def make_post(
 
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
-    img.convert("RGB").save(out, "PNG", optimize=True)
+    rgb = img.convert("RGB")
+    if out.suffix.lower() in (".jpg", ".jpeg"):
+        # Instagram Graph API image_url üçün JPEG tələb edir. subsampling=0 —
+        # mətn kənarlarının yayılmaması üçün.
+        rgb.save(out, "JPEG", quality=95, subsampling=0, optimize=True)
+    else:
+        rgb.save(out, "PNG", optimize=True)
     return out
 
 
