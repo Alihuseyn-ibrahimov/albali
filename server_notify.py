@@ -77,6 +77,15 @@ def bugunku_post(plan: list[dict], bu_gun: date) -> dict | None:
 
 
 def main() -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Al Balı gündəlik post bildirişi")
+    ap.add_argument(
+        "--tarix",
+        help="YYYY-MM-DD — bugünkü tarix əvəzinə bu günün postunu göndər (test/təkrar üçün)",
+    )
+    args = ap.parse_args()
+
     env = _load_env(ENV_PATH)
     token = env.get("TELEGRAM_TOKEN")
     chat_id = env.get("TELEGRAM_ALERT_CHAT_ID") or env.get("TELEGRAM_CHAT_ID")
@@ -89,7 +98,7 @@ def main() -> int:
         return 1
 
     plan = json.loads(SCHEDULE.read_text(encoding="utf-8"))
-    bu_gun = datetime.now(BAKU).date()
+    bu_gun = date.fromisoformat(args.tarix) if args.tarix else datetime.now(BAKU).date()
     post = bugunku_post(plan, bu_gun)
     if post is None:
         print(f"{bu_gun} üçün post yoxdur — cədvəl bitib. Yeni həftə lazımdır.")
