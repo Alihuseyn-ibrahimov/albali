@@ -202,8 +202,8 @@ POSTS: list[dict] = [
         ),
         "tags": TAGS_SATIS,
         "yoxla": "Qablaşdırma ölçüləri köhnə postlarınızdan götürülüb "
-        "(250 qr / 500 qr / 1 kq) — hələ də doğrudurmu? Qiyməti postda "
-        "yazmadım, istəyirsənsə əlavə edək.",
+        "(250 qr / 500 qr / 1 kq) — hələ də doğrudurmu? Qiymət qərara uyğun "
+        "olaraq postda yazılmır, yalnız DM-də verilir.",
     },
     {
         "column": "fakt",
@@ -458,6 +458,12 @@ TEMPLATE = """<title>Al Balı — 1-ci həftənin kontenti</title>
     font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 12px;
   }
   .outro li { margin: 0 0 8px 20px; }
+  .outro code {
+    font: 400 13.5px/1 ui-monospace, "Cascadia Mono", Consolas, monospace;
+    color: var(--accent);
+    background: var(--flag-bg);
+    padding: 2px 5px; border-radius: 3px;
+  }
 
   @media (max-width: 760px) {
     body { padding: 0 18px 72px; }
@@ -493,8 +499,10 @@ TEMPLATE = """<title>Al Balı — 1-ci həftənin kontenti</title>
       <li><b>Real müştəri rəyi.</b> «Sosial sübut» sütunu üçün 2-3 həqiqi müştəri
         mesajı lazımdır. Uydurma rəy yazmıram — sən göndərsən, 2-ci həftəyə
         salarıq.</li>
-      <li><b>Qiymətlər.</b> 250 qr / 500 qr / 1 kq qiymətlərini bilmirəm, ona görə
-        məhsul postunda yazılmayıb.</li>
+      <li><b>Qiymət postlarda yazılmır</b> — sənin qərarın. Süzmə 1 kq 50 ₼,
+        şanı 1 kq 70 ₼, kiçik qablaşdırmalar qrama mütənasib. Cavablar
+        <code>albali/dm_cavablari.md</code> faylında hazırdır. Tək qeyd: 250 qr
+        variantları 12.50 ₼ və 17.50 ₼ çıxır — yuvarlaqlaşdırmaq istəyirsənsə de.</li>
       <li><b>Təsərrüfatdan canlı kadr.</b> Bir dənə də olsa yeni foto/video
         göndərə bilsən, həftədə bir dəfə dizayn əvəzinə real kadr işlədərik —
         bu, etibarı ciddi artırır.</li>
