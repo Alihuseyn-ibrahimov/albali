@@ -8,7 +8,13 @@ Nə edir:
   2. Şəkli və caption mətnini Telegram-a göndərir (kopyalayıb dərc etmək üçün)
   3. Nəticəni loga yazır
 
-Telegram açarı `/opt/saas_core/.env`-dən oxunur — koda YAZILMIR.
+Telegram açarı `/opt/albali/.env`-dən oxunur — koda YAZILMIR.
+Gözlənilən dəyişənlər:
+    ALBALI_TELEGRAM_TOKEN    — Laçın hava botu (ayrıca bot, PR monitorinq botu DEYİL)
+    ALBALI_TELEGRAM_CHAT_ID  — hədəf çat (`--cat-tap` ilə tapıla bilər)
+
+Çat id-ni tapmaq üçün: telefondan həmin bota istənilən mesaj yaz, sonra serverdə
+    python3 /opt/albali/notify.py --cat-tap
 """
 
 from __future__ import annotations
@@ -22,7 +28,7 @@ from datetime import datetime
 from pathlib import Path
 
 BASE = Path("/opt/albali")
-ENV_PATH = Path("/opt/saas_core/.env")
+ENV_PATH = BASE / ".env"
 SCHEDULE = BASE / "schedule.json"
 MEDIA = BASE / "media"
 BAKU = timezone(timedelta(hours=4))
@@ -84,13 +90,57 @@ def main() -> int:
         "--tarix",
         help="YYYY-MM-DD — bugünkü tarix əvəzinə bu günün postunu göndər (test/təkrar üçün)",
     )
+    ap.add_argument(
+        "--cat-tap",
+        action="store_true",
+        help="bota yazılmış son mesajlardan çat id-lərini tap və çap et",
+    )
     args = ap.parse_args()
 
     env = _load_env(ENV_PATH)
-    token = env.get("TELEGRAM_TOKEN")
-    chat_id = env.get("TELEGRAM_ALERT_CHAT_ID") or env.get("TELEGRAM_CHAT_ID")
-    if not token or not chat_id:
-        print("XƏTA: TELEGRAM_TOKEN və ya chat id tapılmadı", file=sys.stderr)
+    token = env.get("ALBALI_TELEGRAM_TOKEN")
+    if not token:
+        print(
+            f"XƏTA: {ENV_PATH} faylında ALBALI_TELEGRAM_TOKEN yoxdur.\n"
+            "Bildiriş göndərilmədi — PR monitorinq botu qəsdən işlədilmir.",
+            file=sys.stderr,
+        )
+        return 1
+
+    if args.cat_tap:
+        r = json.loads(
+            urllib.request.urlopen(
+                API.format(token=token, method="getUpdates"), timeout=30
+            )
+            .read()
+            .decode()
+        )
+        me = json.loads(
+            urllib.request.urlopen(API.format(token=token, method="getMe"), timeout=30)
+            .read()
+            .decode()
+        ).get("result", {})
+        print(f"bot: @{me.get('username')}")
+        taplilar = {}
+        for u in r.get("result", []):
+            msg = u.get("message") or u.get("channel_post") or {}
+            c = msg.get("chat") or {}
+            if c.get("id"):
+                taplilar[c["id"]] = f"{c.get('type')} · {c.get('title') or c.get('first_name')}"
+        if not taplilar:
+            print("Çat tapılmadı — telefondan bota bir mesaj yaz, sonra təkrar işlət.")
+            return 1
+        for cid, tesvir in taplilar.items():
+            print(f"ALBALI_TELEGRAM_CHAT_ID={cid}   ({tesvir})")
+        return 0
+
+    chat_id = env.get("ALBALI_TELEGRAM_CHAT_ID")
+    if not chat_id:
+        print(
+            f"XƏTA: {ENV_PATH} faylında ALBALI_TELEGRAM_CHAT_ID yoxdur.\n"
+            "Tapmaq üçün: python3 /opt/albali/notify.py --cat-tap",
+            file=sys.stderr,
+        )
         return 1
 
     if not SCHEDULE.exists():
