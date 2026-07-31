@@ -516,6 +516,28 @@ TEMPLATE = """<title>Al Balı — 1-ci həftənin kontenti</title>
 """
 
 
+def export_schedule() -> Path:
+    """Serverdəki bildiriş skripti üçün cədvəl faylı yazır."""
+    import json
+
+    plan = []
+    for i, post in enumerate(POSTS):
+        d = START + timedelta(days=i)
+        plan.append(
+            {
+                "tarix": d.isoformat(),
+                "gun": _date_label(d),
+                "sutun": COLUMNS[post["column"]].label,
+                "sekil": f"{d:%m-%d}-{post['column']}.jpg",
+                "caption": post["caption"] + "\n\n" + post["tags"],
+            }
+        )
+    path = OUT_DIR / "schedule.json"
+    path.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"cədvəl: {path}")
+    return path
+
+
 def build() -> Path:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     cards = []
@@ -540,3 +562,4 @@ def build() -> Path:
 
 if __name__ == "__main__":
     build()
+    export_schedule()
