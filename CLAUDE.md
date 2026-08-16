@@ -59,10 +59,18 @@ tərəfində UTF-8→GBK səhv decode ehtimalı), amma iki nəticə çıxarılı
 
 - Poster/şəkil generasiyası (`li-image/generate` xarici servisi) workflow-dan
   tamamilə çıxarılıb — nə Telegram-a, nə LinkedIn-ə şəkil getmir, sırf mətn.
-- Notion "Vakansiyalar" bazasında Status axını: `Yeni` → (n8n emal edir) →
-  `Paylaşıldı` / `İmtina edildi`. **`Yeni`-dən başqa statusa əl ilə keçirmə** —
-  workflow yalnız `Status = Yeni` olanları tutur; əl ilə "Emal olunur" kimi
-  aralıq statusa keçirmək onları axından kənarlaşdırır və sıradan çıxarır.
+- Notion "Vakansiyalar" bazasında Status axını:
+  `Yeni` → (post Telegram-a göndərilən kimi n8n avtomatik `Emal olunur` yazır)
+  → təsdiqdən sonra `Paylaşıldı` / `İmtina edildi`.
+- **Təkrar göndərmənin qarşısını alma:** post Telegram-a düşən kimi həmin
+  qrupun bütün səhifələri `Emal olunur`-a keçirilir ("Təsdiqi Yadda Saxla" →
+  "PageId Siyahısı (Gözləmə)" → "Status Dövrü (Gözləmə)" → "Statusu Yaz
+  (Gözləmə)" node zənciri). Workflow yalnız `Status = Yeni` olanları tutduğu
+  üçün növbəti 15-dəqiqəlik dövrədə həmin post TƏKRAR gəlmir — istifadəçi
+  təsdiqi istədiyi vaxt, tələsmədən verə bilər.
+- **Statusu əl ilə dəyişmə.** `Emal olunur` = "Telegram-da təsdiq gözləyir"
+  deməkdir; onu əl ilə `Yeni`-yə qaytarmaq postun təkrar göndərilməsinə səbəb
+  olur.
 - Schedule Trigger node ("Cədvəl (15 dəq)") hər 15 dəqiqədən bir Notion-u
   yoxlayır, `Yeni` olanları avtomatik emal edir — əl ilə işə salmağa ehtiyac
   yoxdur, amma test üçün `execute_workflow` (production mode) ilə dərhal
